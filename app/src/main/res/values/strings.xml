@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">HackerNews</string>
+    <string name="clear_database">Clear database</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="confirm_clear">Are you sure to clear article cache?</string>
+    <string name="clear_cache">Clear</string>
+    <string name="cancel">Cancel</string>
+</resources>
