@@ -1,5 +1,7 @@
 package com.reindeercrafts.hackernews.data
 
+import java.util.*
+
 class ArticleRepository(private val localSource: ArticleSource, private val remoteSource: ArticleSource) {
 
     var cacheDirty = false
@@ -8,10 +10,11 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
         this.cacheDirty = dirty
     }
 
-    fun getArticles(callback: (List<Article>) -> Unit, remoteCallback: (List<Article>?)  -> Unit) {
+    fun getArticles(sortedByFunction: Comparator<Article>, callback: (List<Article>) -> Unit,
+                    remoteCallback: (List<Article>?)  -> Unit) {
         localSource.getArticles({ articles ->
             if (!articles.isEmpty()) {
-                callback.invoke(articles)
+                callback.invoke(articles.sortedWith(sortedByFunction))
             }
 
             if (articles.isEmpty() || cacheDirty) {
@@ -21,7 +24,7 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
                         cacheDirty = false
                     }
 
-                    remoteCallback.invoke(remoteArticles)
+                    remoteCallback.invoke(remoteArticles.sortedWith(sortedByFunction))
                 })
             }
         })

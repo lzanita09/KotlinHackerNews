@@ -10,8 +10,7 @@ class LocalArticleSource(context: Context) : ArticleSource {
     val database: SQLiteDatabase = SourceDbHelper(context).writableDatabase
 
     override fun getArticles(callback: (List<Article>) -> Unit) {
-        val cursor = database.query(Columns.TABLE_NAME, null, null, null, null, null,
-                Columns.COLUMN_TIME + " DESC")
+        val cursor = database.query(Columns.TABLE_NAME, null, null, null, null, null, null)
         val articles = ArrayList<Article>(cursor.count)
 
         while (cursor.moveToNext()) {

@@ -17,6 +17,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
                             val onSelectedListener: (Article) -> Unit) {
     private val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
     private val refreshLayout: SwipeRefreshLayout = view.findViewById(R.id.refresh_layout) as SwipeRefreshLayout
+    private val comparator: Comparator<Article> = Comparator { a, b -> b.time.compareTo(a.time) }
 
     init {
 
@@ -44,7 +45,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = true
             repository.setArticleCacheDirty(true)
-            repository.getArticles({}, {
+            repository.getArticles(comparator, {}, {
                 refreshLayout.isRefreshing = false
                 if (it != null) {
                     (recyclerView.adapter as ArticleAdapter).prepend(it)
@@ -60,7 +61,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
 
     fun update(cacheDirty: Boolean) {
         repository.setArticleCacheDirty(cacheDirty)
-        repository.getArticles({
+        repository.getArticles(comparator, {
             recyclerView.swapAdapter(ArticleAdapter(ArrayList(it), onSelectedListener), false)
         }, {
             if (it != null) {

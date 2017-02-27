@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.reindeercrafts.hackernews.data.Article.Companion.Columns
 
-class SourceDbHelper : SQLiteOpenHelper {
+class SourceDbHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     companion object Statics {
         val DB_NAME = "hacker_news"
         val DB_VERSION = 1
@@ -29,8 +29,6 @@ class SourceDbHelper : SQLiteOpenHelper {
                 Columns.COLUMN_TITLE + TEXT_TYPE +
                 " )"
     }
-
-    constructor(context: Context) : super(context, DB_NAME, null, DB_VERSION) {}
 
     override fun onCreate(sqLiteDatabase: SQLiteDatabase?) {
         sqLiteDatabase!!.execSQL(CREATE_TABLE_SQL)
