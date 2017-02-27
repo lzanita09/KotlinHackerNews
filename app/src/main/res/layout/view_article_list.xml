@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        android:textColor="@android:color/secondary_text_light"
+        android:textColor="@android:color/tertiary_text_light"
         android:layout_marginTop="@dimen/generic_padding_margin_small"/>
 
 </LinearLayout>
