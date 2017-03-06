@@ -9,8 +9,17 @@ import java.util.*
 class LocalArticleSource(context: Context) : ArticleSource {
     val database: SQLiteDatabase = SourceDbHelper(context).writableDatabase
 
-    override fun getArticles(callback: (List<Article>) -> Unit) {
-        val cursor = database.query(Columns.TABLE_NAME, null, null, null, null, null, null)
+    override fun getArticles(type: String?, callback: (List<Article>) -> Unit) {
+        val selection: String?
+        val selectionArgs: Array<String>?
+        if (type != null) {
+            selection = "type = ? "
+            selectionArgs = arrayOf(type)
+        } else {
+            selection = null
+            selectionArgs = null
+        }
+        val cursor = database.query(Columns.TABLE_NAME, null, selection, selectionArgs, null, null, null)
         val articles = ArrayList<Article>(cursor.count)
 
         while (cursor.moveToNext()) {
@@ -58,7 +67,8 @@ class LocalArticleSource(context: Context) : ArticleSource {
             val title = cursor.getString(cursor.getColumnIndex(Columns.COLUMN_TITLE))
             val type = cursor.getString(cursor.getColumnIndex(Columns.COLUMN_TYPE))
 
-            callback.invoke(Article(article_id, deleted, type, by, time, text, dead, parent, ArrayList(kids.split(", "))
+            callback.invoke(Article(article_id, deleted, type, by, time, text, dead, parent,
+                    if (kids != null) ArrayList<String>(kids.split(", ")) else ArrayList<String>()
                     , url, score, title))
         }
 

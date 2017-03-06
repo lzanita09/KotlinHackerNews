@@ -1,20 +1,24 @@
 package com.reindeercrafts.hackernews
 
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.format.DateUtils
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Button
 import android.widget.TextView
 import com.reindeercrafts.hackernews.data.Article
+import com.reindeercrafts.hackernews.data.ArticleRepository
 
-class ArticleController(view: View, private val article: Article, private val callback: (String) -> Unit) {
+class ArticleController(view: View, private val article: Article, private val articleRepository: ArticleRepository,
+                        private val callback: (String) -> Unit) {
     private val titleView: TextView = view.findViewById(R.id.title) as TextView
     private val timeAndAuthorView: TextView = view.findViewById(R.id.author) as TextView
     private val contentView: TextView = view.findViewById(R.id.content) as TextView
-    private val openButton: Button = view.findViewById(R.id.open_in_browser) as Button
+    private val commentRecyclerView: RecyclerView = view.findViewById(R.id.comment_recycler) as RecyclerView
 
     init {
         titleView.text = article.title
@@ -28,15 +32,27 @@ class ArticleController(view: View, private val article: Article, private val ca
 
         timeAndAuthorView.text = timeAndAuthor
 
-        contentView.text = Html.fromHtml(article.text)
+        if (article.text != null) {
+            contentView.visibility = VISIBLE
+            contentView.text = Html.fromHtml(article.text)
+        } else {
+            contentView.visibility = GONE
+        }
 
         if (article.url != null) {
-            openButton.visibility = VISIBLE
-            openButton.setOnClickListener {
+            titleView.setOnClickListener {
                 callback.invoke(article.url)
             }
-        } else {
-            openButton.visibility = GONE
         }
+
+        val layoutManager = LinearLayoutManager(view.context)
+        commentRecyclerView.layoutManager = layoutManager
+        commentRecyclerView.addItemDecoration(DividerItemDecoration(commentRecyclerView.context, DividerItemDecoration.VERTICAL))
+        commentRecyclerView.isNestedScrollingEnabled = false
+
+        CommentLoader().loadCommentForArticle(article, {
+            commentRecyclerView.adapter = CommentAdapter(it)
+        })
     }
+
 }

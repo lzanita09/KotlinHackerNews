@@ -10,15 +10,15 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
         this.cacheDirty = dirty
     }
 
-    fun getArticles(sortedByFunction: Comparator<Article>, callback: (List<Article>) -> Unit,
-                    remoteCallback: (List<Article>?)  -> Unit) {
-        localSource.getArticles({ articles ->
+    fun getArticles(type: String, sortedByFunction: Comparator<Article>, callback: (List<Article>) -> Unit,
+                    remoteCallback: (List<Article>?) -> Unit) {
+        localSource.getArticles(type, { articles ->
             if (!articles.isEmpty()) {
                 callback.invoke(articles.sortedWith(sortedByFunction))
             }
 
             if (articles.isEmpty() || cacheDirty) {
-                remoteSource.getArticles({ remoteArticles ->
+                remoteSource.getArticles(type, { remoteArticles ->
                     if (remoteArticles.isNotEmpty()) {
                         localSource.saveArticles(remoteArticles)
                         cacheDirty = false
@@ -46,9 +46,9 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
     }
 
     fun trimArticles(callback: () -> Unit) {
-        localSource.getArticles {
+        localSource.getArticles(null, {
             localSource.deleteArticles(it)
             callback.invoke()
-        }
+        })
     }
 }

@@ -45,7 +45,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
         refreshLayout.setOnRefreshListener {
             refreshLayout.isRefreshing = true
             repository.setArticleCacheDirty(true)
-            repository.getArticles(comparator, {}, {
+            repository.getArticles("story", comparator, {}, {
                 refreshLayout.isRefreshing = false
                 if (it != null) {
                     (recyclerView.adapter as ArticleAdapter).prepend(it)
@@ -61,7 +61,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
 
     fun update(cacheDirty: Boolean) {
         repository.setArticleCacheDirty(cacheDirty)
-        repository.getArticles(comparator, {
+        repository.getArticles("story", comparator, {
             recyclerView.swapAdapter(ArticleAdapter(ArrayList(it), onSelectedListener), false)
         }, {
             if (it != null) {

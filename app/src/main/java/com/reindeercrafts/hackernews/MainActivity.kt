@@ -1,9 +1,7 @@
 package com.reindeercrafts.hackernews
 
 import android.app.AlertDialog
-import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -22,11 +20,7 @@ class MainActivity : AppCompatActivity() {
                 RemoteArticleSource(RetrofitHelper.retrofit, SharedPrefsHelper(this)))
 
         controller = ArticleListController(findViewById(android.R.id.content), repository, {
-            if (it.url != null && it.text == null) {
-                CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(it.url.toLowerCase()))
-            } else if (it.text != null) {
-                startActivity(ArticleActivity.intent(this, it))
-            }
+            startActivity(ArticleActivity.intent(this, it))
         })
     }
 

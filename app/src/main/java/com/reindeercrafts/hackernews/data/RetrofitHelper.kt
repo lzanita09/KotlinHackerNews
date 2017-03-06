@@ -9,7 +9,7 @@ class RetrofitHelper {
     companion object RetrofitInstance {
         val client: OkHttpClient = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY)).build()
-        val retrofit: Retrofit = Retrofit.Builder().baseUrl(" https://hacker-news.firebaseio.com/")
+        val retrofit: Retrofit = Retrofit.Builder().baseUrl("https://hacker-news.firebaseio.com/")
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create()).build()
     }

@@ -6,7 +6,7 @@ import java.util.*
 
 data class Article(val id: String, val deleted: Boolean, val type: String, val by: String?,
                    val time: Long, val text: String?, val dead: Boolean, val parent: String?,
-                   val kids: ArrayList<String>?, val url: String?, val score: Int, val title: String) : Parcelable {
+                   val kids: ArrayList<String>?, val url: String?, val score: Int, val title: String?) : Parcelable {
 
 
     protected constructor(source: Parcel) : this(source.readString(), source.readInt() == 1, source.readString(),
