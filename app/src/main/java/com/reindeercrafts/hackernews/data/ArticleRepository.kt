@@ -22,9 +22,8 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
                     if (remoteArticles.isNotEmpty()) {
                         localSource.saveArticles(remoteArticles)
                         cacheDirty = false
+                        remoteCallback.invoke(remoteArticles.sortedWith(sortedByFunction))
                     }
-
-                    remoteCallback.invoke(remoteArticles.sortedWith(sortedByFunction))
                 })
             }
         })

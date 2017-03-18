@@ -5,19 +5,22 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.reindeercrafts.hackernews.data.*
+import com.reindeercrafts.hackernews.data.ArticleRepository
+import com.reindeercrafts.hackernews.data.SharedPrefsHelper
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var repository: ArticleRepository
+    @Inject lateinit var sharedPrefHelper: SharedPrefsHelper
+    @Inject lateinit var repository: ArticleRepository
+
     lateinit var controller: ArticleListController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        repository = ArticleRepository(LocalArticleSource(this),
-                RemoteArticleSource(RetrofitHelper.retrofit, SharedPrefsHelper(this)))
+        (application as MainApplication).getComponent().inject(this)
 
         controller = ArticleListController(findViewById(android.R.id.content), repository, {
             startActivity(ArticleActivity.intent(this, it))
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity() {
                             repository.trimArticles({
                                 controller.update(false)
                             })
+
+                            sharedPrefHelper.clearId()
                         })
                         .setNegativeButton(R.string.cancel, { dialogInterface, which ->
                             dialogInterface.dismiss()

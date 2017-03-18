@@ -15,4 +15,9 @@ class SharedPrefsHelper(private val context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         return prefs.getString(PREFS_KEY_ID, null)
     }
+
+    fun clearId() {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().remove(PREFS_KEY_ID).apply()
+    }
 }

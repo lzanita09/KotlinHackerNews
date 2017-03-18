@@ -3,5 +3,5 @@
     <dimen name="generic_padding_margin_med">16dp</dimen>
     <dimen name="generic_padding_margin_large">32dp</dimen>
     <dimen name="generic_padding_margin_small">8dp</dimen>
-    <dimen name="layered_elevation">8dp</dimen>
+    <dimen name="layered_elevation">2dp</dimen>
 </resources>

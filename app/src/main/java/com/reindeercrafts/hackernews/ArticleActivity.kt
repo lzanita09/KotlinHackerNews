@@ -7,7 +7,9 @@ import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.reindeercrafts.hackernews.data.*
+import com.reindeercrafts.hackernews.data.Article
+import com.reindeercrafts.hackernews.data.ArticleRepository
+import javax.inject.Inject
 
 class ArticleActivity : AppCompatActivity() {
 
@@ -20,16 +22,19 @@ class ArticleActivity : AppCompatActivity() {
         }
     }
 
+    @Inject lateinit var articleRepository: ArticleRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (application as MainApplication).getComponent().inject(this)
 
         setContentView(R.layout.activity_article)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val article: Article = intent.getParcelableExtra(EXTRA_ARTICLE)
-        ArticleController(findViewById(android.R.id.content), article, ArticleRepository(LocalArticleSource(this),
-                RemoteArticleSource(RetrofitHelper.retrofit, SharedPrefsHelper(this))), {
+        ArticleController(findViewById(android.R.id.content), article, articleRepository, {
             CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(it))
         })
     }
