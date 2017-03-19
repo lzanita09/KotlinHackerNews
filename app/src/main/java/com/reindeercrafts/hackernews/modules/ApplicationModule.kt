@@ -34,7 +34,7 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit{
+    fun provideRetrofit(): Retrofit {
         return RetrofitHelper.retrofit
     }
 

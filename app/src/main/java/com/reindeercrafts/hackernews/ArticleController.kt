@@ -11,10 +11,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.TextView
 import com.reindeercrafts.hackernews.data.Article
-import com.reindeercrafts.hackernews.data.ArticleRepository
 
-class ArticleController(view: View, private val article: Article, private val articleRepository: ArticleRepository,
-                        private val callback: (String) -> Unit) {
+class ArticleController(view: View, private val article: Article, private val callback: (String) -> Unit) {
     private val titleView: TextView = view.findViewById(R.id.title) as TextView
     private val timeAndAuthorView: TextView = view.findViewById(R.id.author) as TextView
     private val contentView: TextView = view.findViewById(R.id.content) as TextView
@@ -47,7 +45,8 @@ class ArticleController(view: View, private val article: Article, private val ar
 
         val layoutManager = LinearLayoutManager(view.context)
         commentRecyclerView.layoutManager = layoutManager
-        commentRecyclerView.addItemDecoration(DividerItemDecoration(commentRecyclerView.context, DividerItemDecoration.VERTICAL))
+        commentRecyclerView.addItemDecoration(
+                DividerItemDecoration(commentRecyclerView.context, DividerItemDecoration.VERTICAL))
         commentRecyclerView.isNestedScrollingEnabled = false
 
         CommentLoader().loadCommentForArticle(article, {

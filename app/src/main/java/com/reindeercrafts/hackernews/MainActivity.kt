@@ -37,14 +37,14 @@ class MainActivity : AppCompatActivity() {
             R.id.clear_database -> {
                 AlertDialog.Builder(this)
                         .setMessage(R.string.confirm_clear)
-                        .setPositiveButton(R.string.clear_cache, { dialogInterface, which ->
+                        .setPositiveButton(R.string.clear_cache, { _, _ ->
                             repository.trimArticles({
                                 controller.update(false)
                             })
 
                             sharedPrefHelper.clearId()
                         })
-                        .setNegativeButton(R.string.cancel, { dialogInterface, which ->
+                        .setNegativeButton(R.string.cancel, { dialogInterface, _ ->
                             dialogInterface.dismiss()
                         })
                         .show()

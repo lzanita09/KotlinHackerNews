@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="?selectableItemBackground"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:typeface="serif"
+        android:textColor="@color/color_black"
         android:textSize="18sp"
-        android:textColor="@color/color_black"/>
+        android:typeface="serif"/>
 
     <TextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:layout_marginTop="@dimen/generic_padding_margin_small"
         android:textColor="@android:color/tertiary_text_light"
-        android:layout_marginTop="@dimen/generic_padding_margin_small"/>
+        android:textSize="14sp"/>
 
 </LinearLayout>

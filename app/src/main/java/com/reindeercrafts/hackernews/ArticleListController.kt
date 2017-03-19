@@ -17,7 +17,9 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
                             val onSelectedListener: (Article) -> Unit) {
     private val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
     private val refreshLayout: SwipeRefreshLayout = view.findViewById(R.id.refresh_layout) as SwipeRefreshLayout
-    private val comparator: Comparator<Article> = Comparator { a, b -> b.time.compareTo(a.time) }
+    private val comparator: Comparator<Article> = Comparator { (_, _, _, _, time), (_, _, _, _, time1) ->
+        time.compareTo(time1)
+    }
 
     init {
 
@@ -26,7 +28,8 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
 
         val margin = view.resources.getDimensionPixelSize(R.dimen.generic_padding_margin_med)
         recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
-            override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?, state: RecyclerView.State?) {
+            override fun getItemOffsets(outRect: Rect?, view: View?, parent: RecyclerView?,
+                                        state: RecyclerView.State?) {
                 val position = parent!!.getChildAdapterPosition(view)
                 if (position == 0) {
                     outRect!!.set(margin * 2, margin, margin * 2, margin / 2)
@@ -38,7 +41,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
             }
         })
 
-        recyclerView.setOnScrollChangeListener { view, i1, i2, i3, i4 ->
+        recyclerView.setOnScrollChangeListener { view, _, _, _, _ ->
             refreshLayout.isEnabled = !view.canScrollVertically(-1)
         }
 

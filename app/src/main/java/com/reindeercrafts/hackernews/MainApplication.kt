@@ -3,7 +3,7 @@ package com.reindeercrafts.hackernews
 import android.app.Application
 import com.reindeercrafts.hackernews.modules.ApplicationModule
 
-class MainApplication: Application() {
+class MainApplication : Application() {
 
     lateinit private var component: ApplicationComponent
 

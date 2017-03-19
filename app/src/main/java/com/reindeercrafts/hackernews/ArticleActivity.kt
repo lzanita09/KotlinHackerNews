@@ -34,7 +34,7 @@ class ArticleActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val article: Article = intent.getParcelableExtra(EXTRA_ARTICLE)
-        ArticleController(findViewById(android.R.id.content), article, articleRepository, {
+        ArticleController(findViewById(android.R.id.content), article, {
             CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(it))
         })
     }
