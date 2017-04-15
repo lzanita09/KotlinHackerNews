@@ -4,9 +4,11 @@ import android.os.AsyncTask
 import com.reindeercrafts.hackernews.data.Article
 import com.reindeercrafts.hackernews.data.ArticleApi
 import com.reindeercrafts.hackernews.data.RetrofitHelper
+import retrofit2.Response
+import java.io.IOException
 import java.util.*
 
-class CommentLoader() {
+class CommentLoader {
     private val articleApi = RetrofitHelper.retrofit.create(ArticleApi::class.java)
 
     fun loadCommentForArticle(article: Article, callback: (List<Article>) -> Unit) {
@@ -29,7 +31,13 @@ class CommentLoader() {
 
         private fun loadComment(article: Article, articles: ArrayList<Article>) {
             article.kids?.forEach {
-                val response = articleApi.getStoryById(it).execute()
+                val response: Response<Article>
+                try {
+                    response = articleApi.getStoryById(it).execute()
+                } catch (e: IOException) {
+                    return
+                }
+
                 if (response.isSuccessful) {
                     val result = response.body()
                     articles.add(result)

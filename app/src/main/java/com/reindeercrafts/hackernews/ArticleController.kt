@@ -9,6 +9,7 @@ import android.text.format.DateUtils
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.reindeercrafts.hackernews.data.Article
 
@@ -17,6 +18,7 @@ class ArticleController(view: View, private val article: Article, private val ca
     private val timeAndAuthorView: TextView = view.findViewById(R.id.author) as TextView
     private val contentView: TextView = view.findViewById(R.id.content) as TextView
     private val commentRecyclerView: RecyclerView = view.findViewById(R.id.comment_recycler) as RecyclerView
+    private val loadingView: ProgressBar = view.findViewById(R.id.progress_bar) as ProgressBar
 
     init {
         titleView.text = article.title
@@ -49,7 +51,9 @@ class ArticleController(view: View, private val article: Article, private val ca
                 DividerItemDecoration(commentRecyclerView.context, DividerItemDecoration.VERTICAL))
         commentRecyclerView.isNestedScrollingEnabled = false
 
+        loadingView.visibility = VISIBLE
         CommentLoader().loadCommentForArticle(article, {
+            loadingView.visibility = GONE
             commentRecyclerView.adapter = CommentAdapter(it)
         })
     }
