@@ -15,18 +15,18 @@ class CommentAdapter(private val articles: List<Article>) : RecyclerView.Adapter
     private var previousId: String? = null
     private var previousIndent: Int = 0
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): CommentViewHolder {
-        return CommentViewHolder(LayoutInflater.from(parent!!.context).inflate(R.layout.view_comment, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
+        return CommentViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.view_comment, parent, false))
     }
 
     override fun getItemCount(): Int {
         return articles.size
     }
 
-    override fun onBindViewHolder(holder: CommentViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
         val article = articles[position]
         if (!previousId.isNullOrEmpty() && !article.parent.isNullOrEmpty() && article.parent == previousId) {
-            previousIndent += holder!!.itemView.resources.getDimensionPixelSize(R.dimen.generic_padding_margin_med)
+            previousIndent += holder.itemView.resources.getDimensionPixelSize(R.dimen.generic_padding_margin_med)
             holder.itemView.setPadding(holder.itemView.paddingLeft + previousIndent,
                     holder.itemView.paddingTop, holder.itemView.paddingRight, holder.itemView.paddingBottom)
         } else {
@@ -34,7 +34,7 @@ class CommentAdapter(private val articles: List<Article>) : RecyclerView.Adapter
         }
 
         previousId = article.id
-        holder!!.contentView.text =
+        holder.contentView.text =
                 if (article.text != null) Html.fromHtml(article.text) else null
         holder.contentView.movementMethod = LinkMovementMethod.getInstance()
         val metaData = article.by + " " + DateUtils.getRelativeDateTimeString(holder.itemView.context,
@@ -44,8 +44,8 @@ class CommentAdapter(private val articles: List<Article>) : RecyclerView.Adapter
     }
 
 
-    class CommentViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        val contentView: TextView = itemView!!.findViewById(R.id.content) as TextView
-        val metaDataView: TextView = itemView!!.findViewById(R.id.meta_data) as TextView
+    class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val contentView: TextView = itemView.findViewById(R.id.content) as TextView
+        val metaDataView: TextView = itemView.findViewById(R.id.meta_data) as TextView
     }
 }
