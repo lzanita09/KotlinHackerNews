@@ -10,11 +10,11 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
         this.cacheDirty = dirty
     }
 
-    fun getArticles(type: String, sortedByFunction: Comparator<Article>, callback: (List<Article>) -> Unit,
+    fun getArticles(type: String, sortedByFunction: Comparator<Article>, localCallback: (List<Article>) -> Unit,
                     remoteCallback: (List<Article>?) -> Unit) {
         localSource.getArticles(type, { articles ->
             if (!articles.isEmpty()) {
-                callback.invoke(articles.sortedWith(sortedByFunction))
+                localCallback.invoke(articles.sortedWith(sortedByFunction))
             }
 
             if (articles.isEmpty() || cacheDirty) {

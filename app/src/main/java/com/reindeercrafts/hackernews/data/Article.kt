@@ -1,12 +1,22 @@
 package com.reindeercrafts.hackernews.data
 
+import android.arch.persistence.room.*
 import android.os.Parcel
 import android.os.Parcelable
-import java.util.*
 
-data class Article(val id: String, val deleted: Boolean, val type: String, val by: String?,
-                   val time: Long, val text: String?, val dead: Boolean, val parent: String?,
-                   val kids: ArrayList<String>?, val url: String?, val score: Int, val title: String?) : Parcelable {
+@Entity(indices = arrayOf(Index(value = "id", unique = true)))
+data class Article(@PrimaryKey @ColumnInfo val id: String,
+                   @ColumnInfo val deleted: Boolean,
+                   @ColumnInfo val type: String,
+                   @ColumnInfo val by: String?,
+                   @ColumnInfo val time: Long,
+                   @ColumnInfo val text: String?,
+                   @ColumnInfo val dead: Boolean,
+                   @ColumnInfo val parent: String?,
+                   @ColumnInfo val kids: ArrayList<String>?,
+                   @ColumnInfo val url: String?,
+                   @ColumnInfo val score: Int,
+                   @ColumnInfo val title: String?) : Parcelable {
 
 
     protected constructor(source: Parcel) : this(source.readString(), source.readInt() == 1, source.readString(),
@@ -43,22 +53,27 @@ data class Article(val id: String, val deleted: Boolean, val type: String, val b
                 return arrayOfNulls(size)
             }
         }
+    }
 
-        object Columns {
-            val TABLE_NAME = "articles"
-            val _ID = "_id"
-            val COLUMN_ID = "id"
-            val COLUMN_DELETED = "deleted"
-            val COLUMN_TYPE = "type"
-            val COLUMN_BY = "by"
-            val COLUMN_TIME = "time"
-            val COLUMN_TEXT = "text"
-            val COLUMN_DEAD = "dead"
-            val COLUMN_PARENT = "parent"
-            val COLUMN_KIDS = "kids"
-            val COLUMN_URL = "url"
-            val COLUMN_SCORE = "score"
-            val COLUMN_TITLE = "title"
+    class StringListTypeConverter private constructor() {
+        companion object {
+            @TypeConverter
+            @JvmStatic
+            fun fromList(kids: ArrayList<String>?): String? {
+                if (kids == null) {
+                    return null
+                }
+                return kids.joinToString()
+            }
+
+            @TypeConverter
+            @JvmStatic
+            fun toList(kidsString: String?): ArrayList<String>? {
+                if (kidsString == null) {
+                    return null
+                }
+                return ArrayList(kidsString.split(","))
+            }
         }
     }
 }

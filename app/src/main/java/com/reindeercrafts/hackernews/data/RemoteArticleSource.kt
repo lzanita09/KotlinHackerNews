@@ -18,7 +18,7 @@ class RemoteArticleSource(retrofit: Retrofit, private val prefsHelper: SharedPre
                 }
 
                 val latestId = prefsHelper.getId()
-                val ids = response.body()
+                val ids = response.body()!!
                 val subList = if (latestId == null) ids.subList(0, 20) else ids.filter { it > latestId }
 
                 subList.sortedByDescending { it }
@@ -68,7 +68,7 @@ class RemoteArticleSource(retrofit: Retrofit, private val prefsHelper: SharedPre
                     return articles
                 }
 
-                articles.add(response.body())
+                articles.add(response.body()!!)
             }
 
             articles.sortByDescending { it.time }
