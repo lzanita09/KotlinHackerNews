@@ -68,7 +68,11 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
             recyclerView.swapAdapter(ArticleAdapter(ArrayList(it), onSelectedListener), false)
         }, {
             if (it != null) {
-                (recyclerView.adapter as ArticleAdapter).prepend(it)
+                if (recyclerView.adapter is ArticleAdapter) {
+                    (recyclerView.adapter as ArticleAdapter).prepend(it)
+                } else {
+                    recyclerView.swapAdapter(ArticleAdapter(ArrayList(it), onSelectedListener), false)
+                }
             }
         })
     }

@@ -1,6 +1,7 @@
 package com.reindeercrafts.hackernews.modules
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import com.reindeercrafts.hackernews.data.*
 import dagger.Module
 import dagger.Provides
@@ -10,6 +11,12 @@ import javax.inject.Singleton
 
 @Module
 class ApplicationModule(private val application: Application) {
+
+    @Singleton
+    @Provides
+    fun provideRoomDatabase(): HackerNewsDatabase {
+        return Room.databaseBuilder(application, HackerNewsDatabase::class.java, "hacker_news").build()
+    }
 
     @Provides
     @Singleton
@@ -21,8 +28,8 @@ class ApplicationModule(private val application: Application) {
     @Provides
     @Singleton
     @Named("localSource")
-    fun provideLocalArticleSource(): ArticleSource {
-        return LocalArticleSource(application)
+    fun provideLocalArticleSource(hackerNewsDatabase: HackerNewsDatabase): ArticleSource {
+        return LocalArticleSource(hackerNewsDatabase.articleDao())
     }
 
     @Provides
