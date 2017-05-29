@@ -18,7 +18,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
     private val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
     private val refreshLayout: SwipeRefreshLayout = view.findViewById(R.id.refresh_layout) as SwipeRefreshLayout
     private val comparator: Comparator<Article> = Comparator { (_, _, _, _, time), (_, _, _, _, time1) ->
-        time.compareTo(time1)
+        time1.compareTo(time)
     }
 
     init {

@@ -1,49 +1,41 @@
 package com.reindeercrafts.hackernews
 
 import com.reindeercrafts.hackernews.data.Article
-import com.reindeercrafts.hackernews.data.ArticleApi
-import com.reindeercrafts.hackernews.data.RetrofitHelper
-import io.reactivex.Completable
-import io.reactivex.Observable
+import com.reindeercrafts.hackernews.data.ArticleRepository
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class CommentLoader {
-    private val articleApi = RetrofitHelper.retrofit.create(ArticleApi::class.java)
-
+class CommentLoader(private val articleRepository: ArticleRepository) {
     fun loadCommentForArticle(article: Article, callback: (List<Article>) -> Unit) {
         if (article.kids == null) {
+            callback.invoke(emptyList())
             return
         }
 
-        Observable.fromIterable(article.kids)
+        Flowable.fromIterable(article.kids)
                 .flatMap { loadComment(it) }
                 .flatMap { getSubComments(it) }
-                .toList().toObservable()
+                .toList().toFlowable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { callback.invoke(it) }
     }
 
-    private fun loadComment(id: String): Observable<Article> {
-        return Observable.just(id).flatMap {
-            val response = articleApi.getStoryById(it).execute()
-            if (response.isSuccessful && response.body() != null) {
-                Observable.just(response.body())
-            } else {
-                Completable.complete().toObservable()
-            }
+    private fun loadComment(id: String): Flowable<Article> {
+        return Flowable.just(id).flatMap {
+            articleRepository.getArticle(it)
         }
     }
 
-    private fun getSubComments(article: Article): Observable<Article> {
+    private fun getSubComments(article: Article): Flowable<Article> {
         if (article.kids != null) {
-            return Observable.merge(Observable.just(article),
-                    Observable.fromIterable(article.kids)
+            return Flowable.merge(Flowable.just(article),
+                    Flowable.fromIterable(article.kids)
                             .flatMap { loadComment(it) }
                             .flatMap { getSubComments(it) })
         }
 
-        return Observable.just(article)
+        return Flowable.just(article)
     }
 }

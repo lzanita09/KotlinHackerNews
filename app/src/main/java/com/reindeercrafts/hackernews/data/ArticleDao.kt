@@ -12,13 +12,16 @@ interface ArticleDao {
     @Query("select * from Article where id = :p0")
     fun findById(id: String): Flowable<Article>
 
-    @Query("select * from Article where type = :p0 order by time desc")
+    @Query("select * from Article where id = :p0")
+    fun findByIdSync(id: String): Article
+
+    @Query("select * from Article where type = :p0")
     fun findByType(type: String): Flowable<List<Article>>
 
-    @Query("select * from Article where id in (:p0) order by time desc")
+    @Query("select * from Article where id in (:p0)")
     fun findByIds(ids: Array<String>): Flowable<List<Article>>
 
-    @Query("select * from Article order by time desc")
+    @Query("select * from Article")
     fun findAll(): Flowable<List<Article>>
 
     @Insert(onConflict = REPLACE)

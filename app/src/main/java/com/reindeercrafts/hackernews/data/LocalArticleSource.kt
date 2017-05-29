@@ -4,7 +4,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class LocalArticleSource(private val articleDao: ArticleDao) : ArticleSource {
-
+    override fun getArticleSync(id: String): Article? {
+        return articleDao.findByIdSync(id)
+    }
 
     override fun getArticles(type: String?, callback: (List<Article>) -> Unit) {
         if (type != null) {

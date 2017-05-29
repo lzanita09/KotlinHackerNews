@@ -23,6 +23,7 @@ class ArticleActivity : AppCompatActivity() {
     }
 
     @Inject lateinit var articleRepository: ArticleRepository
+    @Inject lateinit var commentLoader: CommentLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class ArticleActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val article: Article = intent.getParcelableExtra(EXTRA_ARTICLE)
-        ArticleController(findViewById(android.R.id.content), article, {
+        ArticleController(findViewById(android.R.id.content), article, commentLoader, {
             CustomTabsIntent.Builder().build().launchUrl(this, Uri.parse(it))
         })
     }

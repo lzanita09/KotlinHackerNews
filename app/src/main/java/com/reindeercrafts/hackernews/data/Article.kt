@@ -72,7 +72,7 @@ data class Article(@PrimaryKey @ColumnInfo val id: String,
                 if (kidsString == null) {
                     return null
                 }
-                return ArrayList(kidsString.split(","))
+                return ArrayList(kidsString.split(", "))
             }
         }
     }

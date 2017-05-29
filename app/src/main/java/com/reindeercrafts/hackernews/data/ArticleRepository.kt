@@ -1,5 +1,7 @@
 package com.reindeercrafts.hackernews.data
 
+import io.reactivex.Completable
+import io.reactivex.Flowable
 import java.util.*
 
 class ArticleRepository(private val localSource: ArticleSource, private val remoteSource: ArticleSource) {
@@ -29,19 +31,23 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
         })
     }
 
-    fun getArticle(id: String, callback: (Article) -> Unit) {
-        localSource.getArticle(id, { article ->
-            if (article == null) {
-                remoteSource.getArticle(id, { remoteArticle ->
-                    if (remoteArticle != null) {
-                        localSource.saveArticles(listOf(remoteArticle))
-                        callback.invoke(remoteArticle)
-                    }
-                })
+    fun getArticle(id: String): Flowable<Article> {
+        return Flowable.just(id).flatMap {
+            val localArticle = localSource.getArticleSync(it)
+            if (localArticle != null) {
+                // Check local cache to see if it is there already.
+                Flowable.just(localArticle)
             } else {
-                callback.invoke(article)
+                // Fetch from network and store in database.
+                val remoteArticle = remoteSource.getArticleSync(id)
+                if (remoteArticle != null) {
+                    localSource.saveArticles(listOf(remoteArticle))
+                    Flowable.just(remoteArticle)
+                } else {
+                    Completable.complete().toFlowable()
+                }
             }
-        })
+        }
     }
 
     fun trimArticles(callback: () -> Unit) {

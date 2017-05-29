@@ -9,6 +9,9 @@ import com.reindeercrafts.hackernews.data.ArticleRepository
 import com.reindeercrafts.hackernews.data.SharedPrefsHelper
 import javax.inject.Inject
 
+/**
+ * Home activity of the application, displaying a list of articles from Hacker News.
+ */
 class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var sharedPrefHelper: SharedPrefsHelper

@@ -10,6 +10,15 @@ import java.util.*
 class RemoteArticleSource(retrofit: Retrofit, private val prefsHelper: SharedPrefsHelper) : ArticleSource {
     val articleApi: ArticleApi = retrofit.create(ArticleApi::class.java)
 
+    override fun getArticleSync(id: String): Article? {
+        val response = articleApi.getStoryById(id).execute()
+        if (!response.isSuccessful) {
+            return null
+        }
+
+        return response.body()
+    }
+
     override fun getArticles(type: String?, callback: (List<Article>) -> Unit) {
         articleApi.getTopStoriesIds().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>?) {

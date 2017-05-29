@@ -13,7 +13,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.reindeercrafts.hackernews.data.Article
 
-class ArticleController(view: View, private val article: Article, private val callback: (String) -> Unit) {
+class ArticleController(view: View, private val article: Article, commentLoader: CommentLoader,
+                        private val callback: (String) -> Unit) {
     private val titleView: TextView = view.findViewById(R.id.title) as TextView
     private val timeAndAuthorView: TextView = view.findViewById(R.id.author) as TextView
     private val contentView: TextView = view.findViewById(R.id.content) as TextView
@@ -52,7 +53,7 @@ class ArticleController(view: View, private val article: Article, private val ca
         commentRecyclerView.isNestedScrollingEnabled = false
 
         loadingView.visibility = VISIBLE
-        CommentLoader().loadCommentForArticle(article, {
+        commentLoader.loadCommentForArticle(article, {
             loadingView.visibility = GONE
             commentRecyclerView.adapter = CommentAdapter(it)
         })

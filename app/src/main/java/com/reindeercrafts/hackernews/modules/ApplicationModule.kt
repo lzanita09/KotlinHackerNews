@@ -2,6 +2,7 @@ package com.reindeercrafts.hackernews.modules
 
 import android.app.Application
 import android.arch.persistence.room.Room
+import com.reindeercrafts.hackernews.CommentLoader
 import com.reindeercrafts.hackernews.data.*
 import dagger.Module
 import dagger.Provides
@@ -51,4 +52,9 @@ class ApplicationModule(private val application: Application) {
         return SharedPrefsHelper(application)
     }
 
+    @Provides
+    @Singleton
+    fun provideCommentLoader(articleRepository: ArticleRepository): CommentLoader {
+        return CommentLoader(articleRepository)
+    }
 }
