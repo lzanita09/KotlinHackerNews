@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 class CommentLoader(private val articleRepository: ArticleRepository) {
     fun loadCommentForArticle(article: Article, callback: (List<Article>) -> Unit) {
         if (article.kids == null) {
-            callback.invoke(emptyList())
+            callback(emptyList())
             return
         }
 
@@ -19,7 +19,7 @@ class CommentLoader(private val articleRepository: ArticleRepository) {
                 .toList().toFlowable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { callback.invoke(it) }
+                .subscribe { callback(it) }
     }
 
     private fun loadComment(id: String): Flowable<Article> {

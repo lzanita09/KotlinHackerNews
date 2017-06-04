@@ -42,7 +42,7 @@ class ArticleController(view: View, private val article: Article, commentLoader:
 
         if (article.url != null) {
             titleView.setOnClickListener {
-                callback.invoke(article.url)
+                callback(article.url)
             }
         }
 

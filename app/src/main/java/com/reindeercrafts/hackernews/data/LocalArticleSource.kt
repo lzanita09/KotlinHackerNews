@@ -12,19 +12,19 @@ class LocalArticleSource(private val articleDao: ArticleDao) : ArticleSource {
         if (type != null) {
             articleDao.findByType(type).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { callback.invoke(it) }
+                    .subscribe { callback(it) }
 
         } else {
             articleDao.findAll().subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { callback.invoke(it) }
+                    .subscribe { callback(it) }
         }
     }
 
     override fun getArticle(id: String, callback: (Article?) -> Unit) {
         articleDao.findById(id).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { callback.invoke(it) }
+                .subscribe { callback(it) }
 
     }
 

@@ -16,7 +16,7 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
                     remoteCallback: (List<Article>?) -> Unit) {
         localSource.getArticles(type, { articles ->
             if (!articles.isEmpty()) {
-                localCallback.invoke(articles.sortedWith(sortedByFunction))
+                localCallback(articles.sortedWith(sortedByFunction))
             }
 
             if (articles.isEmpty() || cacheDirty) {
@@ -24,7 +24,7 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
                     if (remoteArticles.isNotEmpty()) {
                         localSource.saveArticles(remoteArticles)
                         cacheDirty = false
-                        remoteCallback.invoke(remoteArticles.sortedWith(sortedByFunction))
+                        remoteCallback(remoteArticles.sortedWith(sortedByFunction))
                     }
                 })
             }
@@ -53,7 +53,7 @@ class ArticleRepository(private val localSource: ArticleSource, private val remo
     fun trimArticles(callback: () -> Unit) {
         localSource.getArticles(null, {
             localSource.deleteArticles(it)
-            callback.invoke()
+            callback()
         })
     }
 }

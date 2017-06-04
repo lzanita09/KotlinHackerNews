@@ -52,7 +52,7 @@ class RemoteArticleSource(retrofit: Retrofit, private val prefsHelper: SharedPre
                     return
                 }
 
-                callback.invoke(response.body())
+                callback(response.body())
             }
 
             override fun onFailure(call: Call<Article>?, t: Throwable?) {
@@ -86,7 +86,7 @@ class RemoteArticleSource(retrofit: Retrofit, private val prefsHelper: SharedPre
         }
 
         override fun onPostExecute(result: List<Article>?) {
-            callback.invoke(result!!)
+            callback(result!!)
         }
     }
 

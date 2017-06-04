@@ -87,7 +87,7 @@ class ArticleListController(view: View, private val repository: ArticleRepositor
                     articles[position].time * 1000,
                     DateUtils.MINUTE_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0)
             holder.itemView.setOnClickListener {
-                onSelectedListener.invoke(articles[position])
+                onSelectedListener(articles[position])
             }
         }
 
